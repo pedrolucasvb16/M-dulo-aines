@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo Piloto — Farmacologia dos AINEs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12201A;
+    --bg-card: #1B2C23;
+    --bg-card-2: #203327;
+    --amber: #D6A24A;
+    --amber-soft: #E8C685;
+    --rust: #B65C38;
+    --ink: #ECE5D4;
+    --ink-muted: #93A695;
+    --line: #2C4034;
+    --radius: 4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Source Sans 3', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+
+  a{color:var(--amber-soft);}
+  a:focus-visible, button:focus-visible, .flip-card:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding:72px 0 56px;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(ellipse 700px 300px at 15% -10%, rgba(214,162,74,0.10), transparent);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:1px;
+    background:var(--amber);
+    display:inline-block;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(34px, 6vw, 52px);
+    line-height:1.06;
+    margin:0 0 18px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{
+    font-style:italic;
+    font-weight:300;
+    color:var(--amber-soft);
+  }
+  .lede{
+    font-size:17.5px;
+    color:var(--ink-muted);
+    max-width:52ch;
+    margin:0 0 32px;
+  }
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap; align-items:center;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    padding:14px 24px;
+    border-radius:var(--radius);
+    border:1px solid transparent;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{
+    background:var(--amber);
+    color:#16221A;
+    font-weight:600;
+  }
+  .btn-primary:hover{background:var(--amber-soft); transform:translateY(-1px);}
+  .btn-ghost{
+    border-color:var(--line);
+    color:var(--ink-muted);
+  }
+  .btn-ghost:hover{border-color:var(--amber); color:var(--amber-soft);}
+
+  /* ---------- LABEL / BULA SECTION ---------- */
+  section{padding:56px 0;}
+  .label-box{
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:var(--bg-card);
+    padding:32px;
+  }
+  .label-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+    border-bottom:1px solid var(--line);
+    padding-bottom:14px;
+    margin-bottom:20px;
+  }
+  h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:26px;
+    margin:0 0 8px;
+  }
+  .intro-text{color:var(--ink-muted); margin-bottom:28px; max-width:56ch;}
+
+  .composicao{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:0;
+  }
+  .comp-item{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:20px;
+    padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .comp-item:first-child{border-top:none;}
+  .comp-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--amber);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    padding-top:2px;
+  }
+  .comp-desc strong{color:var(--ink); font-weight:600;}
+  .comp-desc{color:var(--ink-muted);}
+
+  /* ---------- FLASHCARD DEMO (signature) ---------- */
+  .demo-heading{text-align:left; margin-bottom:6px;}
+  .demo-sub{color:var(--ink-muted); margin-bottom:28px;}
+  .flip-card{
+    perspective:1200px;
+    max-width:420px;
+    margin:0 auto;
+    cursor:pointer;
+    border:none;
+    background:none;
+    padding:0;
+    display:block;
+    width:100%;
+  }
+  .flip-inner{
+    position:relative;
+    width:100%;
+    min-height:220px;
+    transition:transform .55s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+  }
+  .flip-card.is-flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:6px;
+    border:1px solid var(--line);
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .flip-front{
+    background:var(--bg-card-2);
+  }
+  .flip-back{
+    background:#22331F;
+    transform:rotateY(180deg);
+    border-color:var(--amber);
+  }
+  .flip-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+    margin-bottom:14px;
+  }
+  .flip-q{font-family:'Fraunces', serif; font-size:20px; font-weight:500; line-height:1.3;}
+  .flip-a{font-size:15.5px; color:var(--ink);}
+  .flip-a b{color:var(--amber-soft);}
+  .flip-hint{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-muted);
+    margin-top:14px;
+    letter-spacing:.04em;
+  }
+
+  /* ---------- POSOLOGIA / PRICING ---------- */
+  .price-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:20px;
+    border:1px solid var(--amber);
+    border-radius:6px;
+    padding:28px 32px;
+    background:linear-gradient(160deg, rgba(214,162,74,0.08), transparent);
+  }
+  .price-value{
+    font-family:'Fraunces', serif;
+    font-size:38px;
+    font-weight:600;
+    color:var(--amber-soft);
+  }
+  .price-value span{font-size:16px; color:var(--ink-muted); font-family:'Source Sans 3', sans-serif; font-weight:400;}
+  .price-note{font-size:13.5px; color:var(--ink-muted); margin-top:4px;}
+
+  footer{
+    padding:40px 0 60px;
+    border-top:1px solid var(--line);
+    margin-top:20px;
+    color:var(--ink-muted);
+    font-size:13.5px;
+  }
+  footer .eyebrow{margin-bottom:14px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Módulo piloto · Revisão de Farmacologia Veterinária</div>
+    <h1>Antes da prova de <em>Farmaco</em>, entenda AINEs de verdade — não decore.</h1>
+    <p class="lede">Resumo direto ao ponto, casos clínicos comentados e flashcards de revisão sobre anti-inflamatórios não esteroidais em Medicina Veterinária. Feito por quem está terminando o curso e sabe exatamente onde a ficha cai na prova.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#posologia">Quero o módulo piloto</a>
+      <a class="btn btn-ghost" href="#demo">Ver uma amostra</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="label-box">
+      <div class="label-title">Bula do material</div>
+      <h2>O que tem dentro</h2>
+      <p class="intro-text">Estruturado como você revisaria na véspera da prova: rápido de consultar, sem enrolação, mas sem perder o raciocínio clínico.</p>
+      <div class="composicao">
+        <div class="comp-item">
+          <div class="comp-label">Resumo</div>
+          <div class="comp-desc"><strong>Farmacologia por classe.</strong> Mecanismo de ação, seletividade COX-1/COX-2, indicações, efeitos adversos e principais diferenças entre os AINEs mais usados na clínica de pequenos animais.</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-label">Casos</div>
+          <div class="comp-desc"><strong>Casos clínicos comentados.</strong> Situações reais de consultório para treinar decisão — não só "qual é a droga", mas "por que essa e não outra nesse paciente".</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-label">Flashcards</div>
+          <div class="comp-desc"><strong>Revisão rápida.</strong> Perguntas objetivas para fixar antes da prova, no formato pergunta/resposta — como o card interativo abaixo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="demo-heading">
+      <div class="eyebrow">Amostra</div>
+      <h2>Toque no card para revisar</h2>
+    </div>
+    <p class="demo-sub">Um exemplo real de flashcard do módulo de AINEs.</p>
+
+    <button class="flip-card" id="flipCard" aria-pressed="false">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <div class="flip-tag">Pergunta</div>
+          <div class="flip-q">Por que o uso de AINEs é mais delicado em gatos do que em cães?</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="flip-tag">Resposta</div>
+          <div class="flip-a">Gatos têm <b>menor capacidade de glicuronidação hepática</b>, o que reduz a eliminação da droga e aumenta o risco de acúmulo e toxicidade — por isso doses e intervalos são mais restritos, e alguns AINEs de cão são contraindicados.</div>
+        </div>
+      </div>
+    </button>
+    <div class="flip-hint">toque para virar</div>
+  </div>
+</section>
+
+<section id="posologia">
+  <div class="wrap">
+    <div class="eyebrow">Como conseguir</div>
+    <h2>Módulo piloto — AINEs</h2>
+    <p class="intro-text">Primeiro módulo da série de revisão. Entrega em PDF, direto no seu WhatsApp ou e-mail.</p>
+    <div class="price-card">
+      <div>
+        <div class="price-value">R$ 19<span>,90 · PDF completo</span></div>
+        <div class="price-note">Pix ou cartão · PDF enviado por WhatsApp assim que o pagamento for confirmado</div>
+      </div>
+      <a class="btn btn-primary" href="https://link.picpay.com/p/17846017846a5edcb8e1d89" target="_blank" rel="noopener">Pagar agora</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="eyebrow">Contato</div>
+    <p>Dúvidas antes de garantir o seu? Chama no WhatsApp: <a href="https://wa.me/5585996771030" target="_blank" rel="noopener">(85) 99677-1030</a></p>
+  </div>
+</footer>
+
+<script>
+  const card = document.getElementById('flipCard');
+  card.addEventListener('click', () => {
+    const flipped = card.classList.toggle('is-flipped');
+    card.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+  });
+</script>
+
+</body>
+</html>
